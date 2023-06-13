@@ -1,6 +1,5 @@
 import pandas as pd
-from fuzzywuzzy import fuzz
-from sklearn.feature_extraction.text import TfidfVectorizer
+from rapidfuzz import fuzz
 
 # Local module
 from handler.preprocessing import preprocessingWithStem
@@ -45,6 +44,7 @@ def recommend_by_content_based_filtering(nama_tempat):
         tags_similarity = fuzz.token_set_ratio(
             nama_tempat.lower(), tempat['tags'].lower())
         rating_similarity = tempat['rating'] / 5
+
         combined_similarity = (nama_tempat_similarity + tags_similarity +
                                rating_similarity + city_similarity + category_similarity) / 5
         matched_tempats.append((index, combined_similarity, tempat['rating']))

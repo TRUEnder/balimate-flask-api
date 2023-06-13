@@ -14,5 +14,3 @@ response = {
     "code": "success",
     "data": result
 }
-
-print(response)
