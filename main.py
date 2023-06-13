@@ -6,7 +6,7 @@ import json
 # Local module
 import handler.idhandler as idhandler
 from handler.query import query
-from preference import recommend_places
+from recommend import recommend_places
 from search import recommend_by_content_based_filtering
 
 
