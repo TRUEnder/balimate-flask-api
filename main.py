@@ -21,40 +21,45 @@ def index():
 
 @app.route('/recommend', methods=['GET'])
 def preferenceHandler():
-    userid = idhandler.decode(request.args.get('userid'))
+    useridResp = idhandler.decode(request.args.get('userid'))
 
-    queryStat = 'SELECT pref_categories, pref_city, pref_price FROM user WHERE user_id=' + \
-        str(userid)
-    queryResp = query(queryStat)
+    if (useridResp['code'] == 'success'):
+        userid = useridResp['data']
+        queryStat = 'SELECT pref_categories, pref_city, pref_price FROM user WHERE user_id=' + \
+            str(userid)
+        queryResp = query(queryStat)
 
-    if queryResp['code'] == 'success':
+        if queryResp['code'] == 'success':
 
-        if (len(queryResp['data']) != 0):
-            (category, city, price) = queryResp['data'][0]
-            obj = json.loads(category)
+            if (len(queryResp['data']) != 0):
+                (category, city, price) = queryResp['data'][0]
+                obj = json.loads(category)
 
-            categories = ''
-            for item in obj:
-                categories += (item + ' ')
+                categories = ''
+                for item in obj:
+                    categories += (item + ' ')
 
-            input = f"{categories} {city} {price} "
+                input = f"{categories} {city} {price} "
 
-            result = recommend_places(input)
-            response = {
-                "code": "success",
-                "data": result
-            }
-            return jsonify(response)
+                result = recommend_places(input)
+                response = {
+                    "code": "success",
+                    "data": result
+                }
+                return jsonify(response)
+
+            else:
+                response = {
+                    "code": "fail",
+                    "message": "Data not found"
+                }
+                return jsonify(response)
 
         else:
-            response = {
-                "code": "fail",
-                "message": "Data not found"
-            }
-            return jsonify(response)
+            return jsonify(queryResp)
 
     else:
-        return jsonify(queryResp)
+        return useridResp
 
 
 @app.route('/search')
