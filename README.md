@@ -1,9 +1,8 @@
-# Balimate ML API
-
+# Balimate ML Rest API
 
 Built using Flask 
 
-<br/>
+<img src="https://miro.medium.com/v2/resize:fit:4800/format:webp/1*0G5zu7CnXdMT9pGbYUTQLQ.png" />
 
 Serving 3 endpoints :
 
