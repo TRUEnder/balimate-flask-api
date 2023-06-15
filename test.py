@@ -5,12 +5,21 @@ import pandas as pd
 from handler.loadDataset import loadDestinations
 from recommend import recommend_places
 from search import recommend_by_content_based_filtering
-from urllib.parse import unquote
+from urllib import request
+from predict import predict
+from handler.preprocessing import preprocessingWithStem
+from sklearn.feature_extraction.text import TfidfVectorizer
 
-query = unquote("pantai%20di%20badung")
+tourism = pd.read_csv('destination.csv', encoding='latin-1')
 
-result = recommend_by_content_based_filtering(query)
-response = {
-    "code": "success",
-    "data": result
-}
+#  Data preprocessing
+
+data_tourism = tourism.copy()
+data_tourism.description = data_tourism.description.apply(
+    preprocessingWithStem)
+
+# TF-IDF matrix
+tfidf_vectorizer = TfidfVectorizer()
+tfidf_matrix = tfidf_vectorizer.fit_transform(data_tourism['description'])
+
+tfidf_dataframe = pd.DataFrame(tfidf_matrix[0])

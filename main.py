@@ -2,11 +2,13 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 import urllib.parse
 import json
+import pandas as pd
 
 # Local module
 import handler.idhandler as idhandler
-from handler.query import query
+from handler.query import query, queryWithColumnNames
 from recommend import recommend_places
+from predict import predict
 from search import recommend_by_content_based_filtering
 
 
@@ -20,7 +22,7 @@ def index():
 
 
 @app.route('/recommend', methods=['GET'])
-def preferenceHandler():
+def recommendationHandler():
     useridResp = idhandler.decode(request.args.get('userid'))
 
     if (useridResp['code'] == 'success'):
@@ -59,7 +61,43 @@ def preferenceHandler():
             return jsonify(queryResp)
 
     else:
-        return useridResp
+        return jsonify(useridResp)
+
+
+@app.route('/predict')
+def predictionHandler():
+    useridResp = idhandler.decode(request.args.get('userid'))
+
+    if (useridResp['code'] == 'success'):
+        userid = useridResp['data']
+        queryStat = 'SELECT place_id FROM destination WHERE place_id NOT IN (SELECT place_id FROM review WHERE user_id=' + str(
+            userid) + ')'
+        queryResp = queryWithColumnNames(queryStat)
+
+        if queryResp['code'] == 'success':
+            if (len(queryResp['data']) != 0):
+                input_data = pd.DataFrame(queryResp['data']['records'],
+                                          columns=queryResp['data']['column_names'])
+
+                result = predict(userid, input_data)
+                response = {
+                    "code": "success",
+                    "data": result
+                }
+                return jsonify(response)
+
+            else:
+                response = {
+                    "code": "fail",
+                    "message": "Data not found"
+                }
+                return jsonify(response)
+
+        else:
+            return jsonify(queryResp)
+
+    else:
+        return jsonify(useridResp)
 
 
 @app.route('/search')

@@ -27,13 +27,3 @@ def loadDestinations():
 
     else:
         return resp
-
-
-def loadUsers():
-    result = queryWithColumnNames('SELECT * FROM destination')
-    return result
-
-
-def loadReviews():
-    result = queryWithColumnNames('SELECT * FROM review')
-    return result
