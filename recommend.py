@@ -21,6 +21,7 @@ def recommend_places(query, top_n=10):
 
     # Load data from local (uncomment below code and comment above code block)
     # tourism = pd.read_csv('destination.csv', encoding='latin-1')
+    # tourism = tourism.fillna('')
 
     # Data Preprocessing
 
