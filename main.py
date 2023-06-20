@@ -63,40 +63,40 @@ def recommendationHandler():
         return jsonify(useridResp)
 
 
-# @app.route('/predict')
-# def predictionHandler():
-#     useridResp = idhandler.decode(request.args.get('userid'))
+@app.route('/predict')
+def predictionHandler():
+    useridResp = idhandler.decode(request.args.get('userid'))
 
-#     if (useridResp['code'] == 'success'):
-#         userid = useridResp['data']
-#         queryStat = 'SELECT place_id FROM destination WHERE place_id NOT IN (SELECT place_id FROM review WHERE user_id=' + str(
-#             userid) + ')'
-#         queryResp = queryWithColumnNames(queryStat)
+    if (useridResp['code'] == 'success'):
+        userid = useridResp['data']
+        queryStat = 'SELECT place_id FROM destination WHERE place_id NOT IN (SELECT place_id FROM review WHERE user_id=' + str(
+            userid) + ')'
+        queryResp = queryWithColumnNames(queryStat)
 
-#         if queryResp['code'] == 'success':
-#             if (len(queryResp['data']) != 0):
-#                 input_data = pd.DataFrame(queryResp['data']['records'],
-#                                           columns=queryResp['data']['column_names'])
+        if queryResp['code'] == 'success':
+            if (len(queryResp['data']) != 0):
+                input_data = pd.DataFrame(queryResp['data']['records'],
+                                          columns=queryResp['data']['column_names'])
 
-#                 result = predict(userid, input_data)
-#                 response = {
-#                     "code": "success",
-#                     "data": result
-#                 }
-#                 return jsonify(response)
+                result = predict(userid, input_data)
+                response = {
+                    "code": "success",
+                    "data": result
+                }
+                return jsonify(response)
 
-#             else:
-#                 response = {
-#                     "code": "fail",
-#                     "message": "Data not found"
-#                 }
-#                 return jsonify(response)
+            else:
+                response = {
+                    "code": "fail",
+                    "message": "Data not found"
+                }
+                return jsonify(response)
 
-#         else:
-#             return jsonify(queryResp)
+        else:
+            return jsonify(queryResp)
 
-#     else:
-#         return jsonify(useridResp)
+    else:
+        return jsonify(useridResp)
 
 
 @app.route('/search')
