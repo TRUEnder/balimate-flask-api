@@ -4,8 +4,7 @@ import tensorflow as tf
 from sklearn.feature_extraction.text import TfidfVectorizer
 
 # Local module
-from handler.preprocessing import preprocessingWithStem
-from handler.loadDataset import loadDestinations
+from handler.loadDataset import loadDestinations, loadRating
 
 
 # Predict User Rating Function
@@ -13,8 +12,10 @@ from handler.loadDataset import loadDestinations
 def predict(userid, have_not_visited_place_ids):
 
     # Load tourism data from local
-    tourism = pd.read_csv('destination.csv', encoding='latin-1')
+    tourism = pd.read_csv('./data/destination.csv', encoding='latin-1')
     tourism = tourism.fillna('')
+    rating = loadRating()
+    tourism['rating'] = rating
 
     # #  Data preprocessing
 
@@ -33,12 +34,12 @@ def predict(userid, have_not_visited_place_ids):
     user_id_column = np.full(input_data.shape[0], float(userid))
 
     # Load tfidf matrix from extracting the feature of place description
-    tfidf_df = pd.read_csv('tfidf_description.csv')
+    tfidf_df = pd.read_csv('./data/tfidf_description.csv')
     tfidf_matrix = np.full(
         (input_data.shape[0], tfidf_df.shape[1]), tfidf_df.to_numpy())
 
     # Recreate the exact same model, including its weights and the optimizer
-    hybrid_model = tf.keras.models.load_model('hybrid_model.h5')
+    hybrid_model = tf.keras.models.load_model('./data/hybrid_model.h5')
 
     # Melakukan prediksi rating untuk tempat yang belum dikunjungi
     predicted_ratings = hybrid_model.predict(

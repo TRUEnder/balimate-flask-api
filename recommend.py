@@ -1,10 +1,11 @@
+import numpy as np
 import pandas as pd
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 
 # Local module
 from handler.preprocessing import preprocessingWithoutStem
-from handler.loadDataset import loadDestinations
+from handler.loadDataset import loadDestinations, loadRating
 
 
 # Fungsi rekomendasi
@@ -13,17 +14,19 @@ def recommend_places(query, top_n=10):
 
     # Load data
 
-    resp = loadDestinations()
-    if (resp['code'] == 'success'):
-        tourism = resp['data']
-    else:
-        return resp
+    # resp = loadDestinations()
+    # if (resp['code'] == 'success'):
+    #     tourism = resp['data']
+    # else:
+    #     return resp
 
     # Load data from local (uncomment below code and comment above code block)
-    # tourism = pd.read_csv('destination.csv', encoding='latin-1')
-    # tourism = tourism.fillna('')
+    tourism = pd.read_csv('./data/destination.csv', encoding='latin-1')
+    tourism = tourism.fillna('')
+    # rating = loadRating()
+    # tourism['rating'] = rating
 
-    # Data Preprocessing
+    # Load Data Preprocessing Result
 
     data_tourism = tourism.copy()
     for index, row in data_tourism.iterrows():
@@ -86,7 +89,7 @@ def recommend_places(query, top_n=10):
 
     # Mengalikan cosine_similarities dengan nilai rating yang sudah dinormalisasi untuk mendapatkan skor akhir.
     # Skor ini mencerminkan seberapa relevan tempat wisata dengan query pengguna.
-    scores = cosine_similarities * data_tourism['rating']
+    scores = cosine_similarities * normalized_rating
 
     # Mengurutkan indeks skor dari yang tertinggi ke terendah
     # dan membatasi hanya sejumlah top_n tempat dengan slicing [:top_n].

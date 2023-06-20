@@ -2,7 +2,6 @@ import pandas as pd
 from rapidfuzz import fuzz
 
 # Local module
-from handler.preprocessing import preprocessingWithStem
 from handler.loadDataset import loadDestinations
 
 
@@ -19,19 +18,11 @@ def recommend_by_content_based_filtering(nama_tempat):
     #     return resp
 
     # Load data from local (uncomment below code and comment above code block)
-    tourism = pd.read_csv('destination.csv', encoding='latin-1')
+    tourism = pd.read_csv('./data/destination.csv', encoding='latin-1')
     tourism = tourism.fillna('')
 
-    # Data Preprocessing
-
-    data_content_based_filtering = tourism.copy()
-    data_content_based_filtering['tags'] = data_content_based_filtering['description'] + \
-        ' ' + data_content_based_filtering['category'] + \
-        data_content_based_filtering['city']
-    data_content_based_filtering.drop(['weekend_holiday_price', 'weekday_price', 'lat', 'lng', 'thumbnail_url',
-                                       'maps_url', 'more_information'], axis=1, inplace=True)
-    data_content_based_filtering.tags = data_content_based_filtering.tags.apply(
-        preprocessingWithStem)
+    data_content_based_filtering = pd.read_csv(
+        './data/data_content_based_filtering.csv')
 
     matched_tempats = []
 
