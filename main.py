@@ -8,6 +8,7 @@ import pandas as pd
 import handler.idhandler as idhandler
 from handler.query import query, queryWithColumnNames
 from recommend import recommend_places
+from predict import predict
 from search import recommend_by_content_based_filtering
 
 
