@@ -18,3 +18,4 @@ tfidf_matrix = np.full(
     (tourism.shape[0], tfidf_df.shape[1]), tfidf_df.to_numpy())
 
 print(tfidf_matrix.shape)
+print(tfidf_df)
