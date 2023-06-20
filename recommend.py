@@ -14,19 +14,12 @@ def recommend_places(query, top_n=10):
 
     # Load data
 
-    # resp = loadDestinations()
-    # if (resp['code'] == 'success'):
-    #     tourism = resp['data']
-    # else:
-    #     return resp
-
-    # Load data from local (uncomment below code and comment above code block)
     tourism = pd.read_csv('./data/destination.csv', encoding='latin-1')
     tourism = tourism.fillna('')
     # rating = loadRating()
     # tourism['rating'] = rating
 
-    # Load Data Preprocessing Result
+    # Data Preprocessing
 
     data_tourism = tourism.copy()
     for index, row in data_tourism.iterrows():
@@ -57,8 +50,8 @@ def recommend_places(query, top_n=10):
 
     data_tourism['tags'] = data_tourism['category_tags'] + ' ' + \
         data_tourism['city'] + ' ' + data_tourism['price_tags']
-    data_tourism.drop(['lat', 'lng', 'thumbnail_url',
-                       'maps_url', 'more_information'], axis=1, inplace=True)
+    data_tourism.drop(['lat', 'lng', 'thumbnail_url', 'maps_url',
+                      'more_information'], axis=1, inplace=True)
     data_tourism.tags = data_tourism.tags.apply(preprocessingWithoutStem)
 
     # inisialisasi untuk mengubah teks menjadi representasi TF-IDF.

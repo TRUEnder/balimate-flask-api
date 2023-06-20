@@ -11,13 +11,14 @@ from handler.loadDataset import loadDestinations, loadRating
 
 def predict(userid, have_not_visited_place_ids):
 
-    # Load tourism data from local
+    # Load data
+
     tourism = pd.read_csv('./data/destination.csv', encoding='latin-1')
     tourism = tourism.fillna('')
     rating = loadRating()
     tourism['rating'] = rating
 
-    # #  Data preprocessing
+    # # Data preprocessing
 
     # data_tourism = tourism.copy()
     # data_tourism.description = data_tourism.description.apply(
@@ -30,6 +31,7 @@ def predict(userid, have_not_visited_place_ids):
     # input_data adalah deretan destination yang belum pernah dikunjungi user
     # input_data = tourism[tourism['place_id'].isin(
     #     have_not_visited_place_ids['place_id'])]
+
     input_data = tourism['place_id'].values
     user_id_column = np.full(input_data.shape[0], float(userid))
 
@@ -44,8 +46,10 @@ def predict(userid, have_not_visited_place_ids):
     # Melakukan prediksi rating untuk tempat yang belum dikunjungi
     predicted_ratings = hybrid_model.predict(
         [tfidf_matrix, user_id_column, input_data])
+
     # Membatasi nilai dalam rentang [0, 5]
     predicted_ratings = np.clip(predicted_ratings, 0, 5)
+
     # Menykalakan nilai ke rentang [0, 5]
     predicted_ratings = (predicted_ratings / np.max(predicted_ratings)) * 5
 

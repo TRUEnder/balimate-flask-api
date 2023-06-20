@@ -11,13 +11,6 @@ def recommend_by_content_based_filtering(nama_tempat):
 
     # Load data
 
-    # resp = loadDestinations()
-    # if (resp['code'] == 'success'):
-    #     tourism = resp['data']
-    # else:
-    #     return resp
-
-    # Load data from local (uncomment below code and comment above code block)
     tourism = pd.read_csv('./data/destination.csv', encoding='latin-1')
     tourism = tourism.fillna('')
 
