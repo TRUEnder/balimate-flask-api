@@ -10,12 +10,8 @@ from search import recommend_by_content_based_filtering
 from urllib import request
 from handler.preprocessing import preprocessingWithStem
 from sklearn.feature_extraction.text import TfidfVectorizer
+from recommend_destinations import recommend_destinations
 
-tourism = pd.read_csv('./data/destination.csv')
+result = recommend_destinations(10)
 
-tfidf_df = pd.read_csv('./data/tfidf_preference.csv')
-tfidf_matrix = np.full(
-    (tourism.shape[0], tfidf_df.shape[1]), tfidf_df.to_numpy())
-
-print(tfidf_matrix.shape)
-print(tfidf_df)
+print(result)
